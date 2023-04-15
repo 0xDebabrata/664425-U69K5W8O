@@ -5,8 +5,10 @@ const getImages = () => {
     
     for (let e of imgs) {
         if (!e.alt) {
-            filtered.push(e.src)
-            imgTags.push(e)
+            if (e.src.endsWith('jpg') || e.src.endsWith('png')) {
+                filtered.push(e.src)
+                imgTags.push(e)
+            }
         }
     }
 
@@ -32,7 +34,7 @@ const getAnchorTags = () => {
 
     return {
         anchorTags,
-        urls: urls.slice(0,5)
+        urls: urls
     }
 }
 
@@ -44,12 +46,10 @@ const improveAccessibility = () => {
         console.log(response)
         console.log(anchorTags)
         console.log(imgTags)
-        /*
-        for (let i = 0; i < response.length; i++) {
-            anchorTags[i].ariaLabel = response[i]
+        for (let i = 0; i < response.a.length; i++) {
+            anchorTags[i].ariaLabel = response.a[i]
         }
         console.log("Anchor tags updated")
-        */
     }
 
     chrome.runtime.sendMessage(

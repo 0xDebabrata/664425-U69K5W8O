@@ -1,26 +1,20 @@
 const getImages = () => {
     const imgs = document.getElementsByTagName("img")
+    const imgTags = []
     const filtered = []
     
     for (let e of imgs) {
         if (!e.alt) {
             filtered.push(e.src)
+            imgTags.push(e)
         }
     }
 
-    const handleImgResponse = (response) => {
-        for (let i = 0; i < response.length; i++) {
-            anchorTags[i].ariaLabel = response[i]
-        }
-        console.log("Anchor tags updated")
+    return {
+        img: filtered,
+        imgTags
     }
 
-    chrome.runtime.sendMessage(
-        {
-            img: filtered,
-        },
-        handleImgResponse
-    )
 }
 
 const getAnchorTags = () => {
@@ -36,46 +30,37 @@ const getAnchorTags = () => {
         }
     }
 
-    const handleAnchorResponse = (response) => {
+    return {
+        anchorTags,
+        urls: urls.slice(0,5)
+    }
+}
+
+const improveAccessibility = () => {
+    const { urls, anchorTags } = getAnchorTags()
+    const { img, imgTags } = getImages()
+
+    const handleResponse = (response) => {
+        console.log(response)
+        console.log(anchorTags)
+        console.log(imgTags)
+        /*
         for (let i = 0; i < response.length; i++) {
             anchorTags[i].ariaLabel = response[i]
         }
         console.log("Anchor tags updated")
+        */
     }
 
     chrome.runtime.sendMessage(
         {
             urls,
+            img
         },
-        handleAnchorResponse
+        handleResponse
     )
 
     return urls
 }
 
-
-const article = document.querySelector("article");
-
-// `document.querySelector` may return null if the selector doesn't match anything.
-if (article) {
-  const text = article.textContent;
-  const wordMatchRegExp = /[^\s]+/g; // Regular expression
-  const words = text.matchAll(wordMatchRegExp);
-  // matchAll returns an iterator, convert to array to get word count
-  const wordCount = [...words].length;
-  const readingTime = Math.round(wordCount / 200);
-  const badge = document.createElement("p");
-  // Use the same styling as the publish information in an article's header
-  badge.classList.add("color-secondary-text", "type--caption");
-  badge.textContent = `⏱️ ${readingTime} min read`;
-
-  // Support for API reference docs
-  const heading = article.querySelector("h1");
-  // Support for article docs with date
-  const date = article.querySelector("time")?.parentNode;
-
-  (date ?? heading).insertAdjacentElement("afterend", badge);
-}
-
-getAnchorTags()
-getImages()
+improveAccessibility()

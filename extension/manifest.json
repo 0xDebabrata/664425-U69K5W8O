@@ -3,7 +3,9 @@
   "name": "accessify.",
   "description": "Improving web accessiblity",
   "version": "1.0",
-  "background": "background.js",
+  "background": {
+    "service_worker": "background.js"
+  },
   "icons": {
     "128": "assets/logo.png"
   },

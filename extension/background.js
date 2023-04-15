@@ -9,7 +9,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             "content-type": "application/json"
         },
         body: JSON.stringify({
-            a: message.urls
+            a: message.urls,
+            img: message.img
         })
     })
         .then(resp => resp.json())

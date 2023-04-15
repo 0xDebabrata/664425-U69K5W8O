@@ -14,7 +14,8 @@ origins = [
 
 
 def download_image(url):
-    tup = urllib.request.urlretrieve(url, "/sGPT/image.jpg")
+    tup = urllib.request.urlretrieve(url, "./sGPT/image.jpg")
+    print("image downloaded")
 
 
 app = FastAPI()
@@ -32,7 +33,9 @@ class RequestParams(BaseModel):
 
 
 @app.post("/")
-def read_root(req: RequestParams):
+def read_root(req: RequestParams) -> str:
+    print("download start")
     download_image(req.url)
+    print("download end")
     caption: str = generate_caption()
     return caption

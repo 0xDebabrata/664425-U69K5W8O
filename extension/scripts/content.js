@@ -1,8 +1,22 @@
 const getImages = () => {
     const imgs = document.getElementsByTagName("img")
+    const imgTags = []
+    const filtered = []
+    
     for (let e of imgs) {
-        console.log(e.alt)
+        if (!e.alt) {
+            if (e.src.endsWith('jpg') || e.src.endsWith('png')) {
+                filtered.push(e.src)
+                imgTags.push(e)
+            }
+        }
     }
+
+    return {
+        img: filtered,
+        imgTags
+    }
+
 }
 
 const getAnchorTags = () => {
@@ -18,47 +32,36 @@ const getAnchorTags = () => {
         }
     }
 
-    const handleAnchorResponse = (response) => {
-        for (let i = 0; i < response.length; i++) {
-            anchorTags[i].ariaLabel = response[i]
-        }
-        const links = document.getElementsByTagName("a")
-        console.log(links)
+    return {
+        anchorTags,
+        urls: urls
     }
+}
 
+const improveAccessibility = () => {
+    const { urls, anchorTags } = getAnchorTags()
+    const { img, imgTags } = getImages()
+
+    const handleResponse = (response) => {
+        console.log(response)
+        for (let i = 0; i < response.a.length; i++) {
+            anchorTags[i].ariaLabel = response.a[i]
+        }
+        for (let i = 0; i < response.img.length; i++) {
+            imgTags[i].alt = response.img[i].substr(10, response.img[i].length - 6 - 11)
+        }
+        console.log("Anchor and img tags updated")
+    }
 
     chrome.runtime.sendMessage(
         {
             urls,
+            img
         },
-        handleAnchorResponse
+        handleResponse
     )
 
     return urls
 }
 
-
-const article = document.querySelector("article");
-
-// `document.querySelector` may return null if the selector doesn't match anything.
-if (article) {
-  const text = article.textContent;
-  const wordMatchRegExp = /[^\s]+/g; // Regular expression
-  const words = text.matchAll(wordMatchRegExp);
-  // matchAll returns an iterator, convert to array to get word count
-  const wordCount = [...words].length;
-  const readingTime = Math.round(wordCount / 200);
-  const badge = document.createElement("p");
-  // Use the same styling as the publish information in an article's header
-  badge.classList.add("color-secondary-text", "type--caption");
-  badge.textContent = `⏱️ ${readingTime} min read`;
-
-  // Support for API reference docs
-  const heading = article.querySelector("h1");
-  // Support for article docs with date
-  const date = article.querySelector("time")?.parentNode;
-
-  (date ?? heading).insertAdjacentElement("afterend", badge);
-}
-
-getAnchorTags()
+improveAccessibility()

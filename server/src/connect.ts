@@ -20,7 +20,8 @@ export async function gptCall(elementList: string[], type: "button" | "anchor"):
             "messages": [
                 { "role": "system", "content": prompts[type].sysMessage },
                 { "role": "user", "content": prompts[type].userMessage + gptInputString }
-            ]
+            ],
+            "max_tokens": 2000
         })
     })
     const data = await res.json()

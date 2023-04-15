@@ -32,7 +32,6 @@ app.post('/process-elements', async (req: Request, res: Response) => {
     }
     const accessibleOutput: string = await gptCall(a, "anchor");
     const accessibleArray = accessibleOutput.split("\n")
-
     res.json(accessibleArray)
 });
 

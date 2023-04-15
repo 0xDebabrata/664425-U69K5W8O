@@ -19,7 +19,7 @@ app.post('/process-elements', async (req: Request, res: Response) => {
     const { a, img, btn } = req.body
     const parr = []
     let anchorAccessibleArray: any[] = []
-    /*
+
     let buttonAccessibleArray: any[] = []
     let imageAccessibleArray: any[] = []
     if (a) {
@@ -56,11 +56,11 @@ app.post('/process-elements', async (req: Request, res: Response) => {
     }
 
     console.log(serverResponse)
-    */
+
     res.json({
         a: anchorAccessibleArray,
-        //btn: buttonAccessibleArray,
-        //img: imageAccessibleArray
+        btn: buttonAccessibleArray,
+        img: imageAccessibleArray
     })
 });
 

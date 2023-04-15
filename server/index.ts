@@ -19,7 +19,6 @@ app.post('/process-elements', async (req: Request, res: Response) => {
     const { a } = req.body
     const accessibleOutput: string = await gptCall(a, "anchor");
     const accessibleArray = accessibleOutput.split("\n")
-    console.log(accessibleArray)
     res.json(accessibleArray)
 });
 

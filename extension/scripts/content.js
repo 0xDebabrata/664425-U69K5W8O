@@ -5,27 +5,33 @@ const getImages = () => {
     }
 }
 
-const handleResponse = (response) => {
-    console.log(response)
-}
-
 const getAnchorTags = () => {
     const urls = []
+    const anchorTags = []
     const links = document.getElementsByTagName("a")
     const regex = /\bhttps?:\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#\/%=~_|]/;
 
     for (let a of links) {
         if (a.href && regex.test(a.href)) {
             urls.push(a.href)
+            anchorTags.push(a)
         }
     }
-    console.log(urls.join('\n'))
+
+    const handleAnchorResponse = (response) => {
+        for (let i = 0; i < response.length; i++) {
+            anchorTags[i].ariaLabel = response[i]
+        }
+        const links = document.getElementsByTagName("a")
+        console.log(links)
+    }
+
 
     chrome.runtime.sendMessage(
         {
             urls,
         },
-        handleResponse
+        handleAnchorResponse
     )
 
     return urls

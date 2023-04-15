@@ -15,12 +15,11 @@ const getAnchorTags = () => {
     const regex = /\bhttps?:\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#\/%=~_|]/;
 
     for (let a of links) {
-        if (regex.test(a.href)) {
-            console.log(a.href)
-            console.log(a.textContent)
+        if (a.href && regex.test(a.href)) {
             urls.push(a.href)
         }
     }
+    console.log(urls.join('\n'))
 
     chrome.runtime.sendMessage(
         {

@@ -2,7 +2,7 @@ import { GPT_CHAT_URL, OPENAI_API_KEY } from "./environment"
 import { prompts } from "./sys_prompts"
 
 export async function gptCall(elementList: string[], type: "button" | "anchor"): Promise<string> {
-    const gptInputString = elementList.join('\n')
+    const gptInputString = elementList.join("\n")
 
     const res = await fetch(GPT_CHAT_URL, {
         method: "POST",

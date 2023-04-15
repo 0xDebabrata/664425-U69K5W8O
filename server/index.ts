@@ -1,9 +1,9 @@
 import express, { Express, Request, Response } from 'express';
-const cors = require('cors')
 import bodyParser from 'body-parser';
 import { gptCall } from './src/connect';
 import { PORT } from './src/environment'
 
+const cors = require('cors')
 const app: Express = express();
 
 app.use(bodyParser.json())
@@ -17,11 +17,9 @@ app.get('/', (req: Request, res: Response) => {
 
 app.post('/process-elements', async (req: Request, res: Response) => {
     const { a } = req.body
-    console.log(a[0])
-
     const accessibleOutput: string = await gptCall(a, "anchor");
     const accessibleArray = accessibleOutput.split("\n")
-    //res.send(accessibleArray)
+    console.log(accessibleArray)
     res.json(accessibleArray)
 });
 

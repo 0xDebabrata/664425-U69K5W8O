@@ -1,15 +1,38 @@
 from typing import Union
 
+import urllib.request
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from sGPT import generate_caption
+
+origins = [
+    "*",
+    "http://localhost",
+    "http://localhost:8080",
+]
+
+
+def download_image(url):
+    tup = urllib.request.urlretrieve(url, "/sGPT/image.jpg")
+
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+class RequestParams(BaseModel):
+    url: str
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.post("/")
+def read_root(req: RequestParams):
+    download_image(req.url)
+    caption: str = generate_caption()
+    return caption

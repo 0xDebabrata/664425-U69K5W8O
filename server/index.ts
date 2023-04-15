@@ -32,22 +32,45 @@ app.post('/process-elements', async (req: Request, res: Response) => {
         buttonAccessibleArray = buttonOutput.split("\n")
     }
 
-    if (img) {
-        for (const url in img) {
-            const data = fetch('http://localhost:8080/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    url: url
-                })
-            })
-            parr.push(data)
-        }
+    console.log(img)
+    let data1: any = await fetch('http://127.0.0.1:8080/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            url: img[0]
+        })
+    })
+    data1 = await data1.text()
+    let data2: any = await fetch('http://127.0.0.1:8080/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            url: img[1]
+        })
+    })
+    data2 = await data2.text()
 
-        imageAccessibleArray = await Promise.all(parr)
-    }
+    // console.log(parr)
+    // imageAccessibleArray = await Promise.all(parr)
+
+    // abcimg = imageAccessibleArray.map(async (image) => await image.text())
+    imageAccessibleArray.push(data1, data2)
+    console.log(imageAccessibleArray)
+    /*
+     const data = await fetch('http://127.0.0.1:8080/', {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application/json'
+         },
+         body: JSON.stringify({
+             url: img[0]
+         })
+     })
+     */
 
     const serverResponse = {
         a: anchorAccessibleArray,

@@ -1,8 +1,26 @@
 const getImages = () => {
     const imgs = document.getElementsByTagName("img")
+    const filtered = []
+    
     for (let e of imgs) {
-        console.log(e.alt)
+        if (!e.alt) {
+            filtered.push(e.src)
+        }
     }
+
+    const handleImgResponse = (response) => {
+        for (let i = 0; i < response.length; i++) {
+            anchorTags[i].ariaLabel = response[i]
+        }
+        console.log("Anchor tags updated")
+    }
+
+    chrome.runtime.sendMessage(
+        {
+            img: filtered,
+        },
+        handleImgResponse
+    )
 }
 
 const getAnchorTags = () => {
@@ -22,10 +40,8 @@ const getAnchorTags = () => {
         for (let i = 0; i < response.length; i++) {
             anchorTags[i].ariaLabel = response[i]
         }
-        const links = document.getElementsByTagName("a")
-        console.log(links)
+        console.log("Anchor tags updated")
     }
-
 
     chrome.runtime.sendMessage(
         {
@@ -62,3 +78,4 @@ if (article) {
 }
 
 getAnchorTags()
+getImages()

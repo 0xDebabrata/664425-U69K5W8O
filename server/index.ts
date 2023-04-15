@@ -17,8 +17,9 @@ app.get('/', (req: Request, res: Response) => {
 
 app.post('/process-elements', async (req: Request, res: Response) => {
     const { a, img, btn } = req.body
-    const imgCaptions: string[] = []
 
+    const imgCaptions = []
+    const promises = []
     for (const url in img) {
         const data = fetch('http://localhost:8080/', {
             method: 'POST',
@@ -29,7 +30,9 @@ app.post('/process-elements', async (req: Request, res: Response) => {
                 url: url
             })
         })
+        promises.push(data)
     }
+
     const accessibleOutput: string = await gptCall(a, "anchor");
     const accessibleArray = accessibleOutput.split("\n")
     res.json(accessibleArray)

@@ -26,7 +26,8 @@ export const prompts: {
             WAI sitemap for web accessibility information
             WAI search for web accessibility information
             Here are some URLs. Please suggest 1 line aria-labels for each of the URLs in a new line. 
-            Give your response in a new line and don't provide anything else
+            Give your response in a new line and don't provide anything else.
+            Do not mention the original URL in the output, only the description.
         `,
         temperature: 0.5
     }

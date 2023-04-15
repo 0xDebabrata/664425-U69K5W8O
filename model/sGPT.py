@@ -1,6 +1,5 @@
 import tensorflow
 import string
-import requests
 
 from pickle import load
 from numpy import argmax
@@ -13,10 +12,27 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 from tensorflow.keras.models import Model
 
 
-tokenizer_url = "./tokenizer.pkl"
-model_url = "./model_9.h5"
-model_json_url = "./model.json"
-test_image_url = "./image.jpg"
+tokenizer_url = "./sGPT/tokenizer.pkl"
+model_url = "./sGPT/model_9.h5"
+model_json_url = "./sGPT/model.json"
+test_image_url = "./sGPT/image.jpg"
+
+# load the tokenizer
+tokenizer = load(open(tokenizer_url, "rb"))
+# pre-define the max sequence length (from training)
+max_length = 34
+
+# opening and store file in a variable
+json_file = open(model_json_url, "r")
+loaded_model_json = json_file.read()
+json_file.close()
+
+# use Keras model_from_json to make a loaded model
+loaded_model = tensorflow.keras.models.model_from_json(loaded_model_json)
+
+# load weights into new model
+loaded_model.load_weights(model_url)
+model = loaded_model
 
 
 # extract features from each photo in the directory
@@ -74,26 +90,9 @@ def generate_desc(model, tokenizer, photo, max_length):
     return in_text
 
 
-# load the tokenizer
-tokenizer = load(open(tokenizer_url, "rb"))
-# pre-define the max sequence length (from training)
-max_length = 34
-
-# opening and store file in a variable
-json_file = open(model_json_url, "r")
-loaded_model_json = json_file.read()
-json_file.close()
-
-# use Keras model_from_json to make a loaded model
-loaded_model = tensorflow.keras.models.model_from_json(loaded_model_json)
-
-# load weights into new model
-loaded_model.load_weights(model_url)
-model = loaded_model
-
-# load and prepare the photograph
-photo = extract_features(test_image_url)
-
-# generate description
-description = generate_desc(model, tokenizer, photo, max_length)
-print(description)
+def generate_caption(url: string):
+    # load and prepare the photograph
+    photo = extract_features(test_image_url)
+    # generate description
+    description = generate_desc(model, tokenizer, photo, max_length)
+    print(description)

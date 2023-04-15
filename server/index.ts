@@ -17,6 +17,9 @@ app.get('/', (req: Request, res: Response) => {
 
 app.post('/process-elements', async (req: Request, res: Response) => {
     const { a, img, btn } = req.body
+    const anchorOutput: string = await gptCall(a, "anchor");
+    const anchorAccessibleArray = anchorOutput.split("\n")
+    /*
     const imgCaptions: string[] = []
     const parr = []
 
@@ -41,11 +44,12 @@ app.post('/process-elements', async (req: Request, res: Response) => {
     }
 
     const imageAccessibleArray = await Promise.all(parr)
+    */
 
     res.json({
         a: anchorAccessibleArray,
-        btn: buttonAccessibleArray,
-        img: imageAccessibleArray
+        //btn: buttonAccessibleArray,
+        //img: imageAccessibleArray
     })
 });
 

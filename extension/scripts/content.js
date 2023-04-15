@@ -44,8 +44,6 @@ const improveAccessibility = () => {
 
     const handleResponse = (response) => {
         console.log(response)
-        console.log(anchorTags)
-        console.log(imgTags)
         for (let i = 0; i < response.a.length; i++) {
             anchorTags[i].ariaLabel = response.a[i]
         }

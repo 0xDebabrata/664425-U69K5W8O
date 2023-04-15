@@ -16,10 +16,23 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/process-elements', async (req: Request, res: Response) => {
-    const { a } = req.body
+    const { a, img, btn } = req.body
+    const imgCaptions: string[] = []
+
+    for (const url in img) {
+        const data = fetch('http://localhost:8080/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                url: url
+            })
+        })
+    }
     const accessibleOutput: string = await gptCall(a, "anchor");
     const accessibleArray = accessibleOutput.split("\n")
-    console.log(accessibleArray)
+
     res.json(accessibleArray)
 });
 

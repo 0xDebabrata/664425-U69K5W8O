@@ -90,9 +90,10 @@ def generate_desc(model, tokenizer, photo, max_length):
     return in_text
 
 
-def generate_caption(url: string):
+def generate_caption() -> str:
     # load and prepare the photograph
     photo = extract_features(test_image_url)
     # generate description
     description = generate_desc(model, tokenizer, photo, max_length)
     print(description)
+    return description

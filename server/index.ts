@@ -18,6 +18,13 @@ app.get('/', (req: Request, res: Response) => {
 app.post('/process-elements', async (req: Request, res: Response) => {
     const { a, img, btn } = req.body
     const imgCaptions: string[] = []
+    const parr = []
+
+    const anchorOutput: string = await gptCall(a, "anchor");
+    const anchorAccessibleArray = anchorOutput.split("\n")
+
+    const buttonOutput: string = await gptCall(btn, "button");
+    const buttonAccessibleArray = buttonOutput.split("\n")
 
     for (const url in img) {
         const data = fetch('http://localhost:8080/', {
@@ -29,10 +36,16 @@ app.post('/process-elements', async (req: Request, res: Response) => {
                 url: url
             })
         })
+        parr.push(data)
     }
-    const accessibleOutput: string = await gptCall(a, "anchor");
-    const accessibleArray = accessibleOutput.split("\n")
-    res.json(accessibleArray)
+
+    const imageAccessibleArray = await Promise.all(parr)
+
+    res.json({
+        a: anchorAccessibleArray,
+        btn: buttonAccessibleArray,
+        img: imageAccessibleArray
+    })
 });
 
 app.listen(PORT, () => {

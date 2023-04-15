@@ -49,7 +49,10 @@ const improveAccessibility = () => {
         for (let i = 0; i < response.a.length; i++) {
             anchorTags[i].ariaLabel = response.a[i]
         }
-        console.log("Anchor tags updated")
+        for (let i = 0; i < response.img.length; i++) {
+            imgTags[i].alt = response.a[i]
+        }
+        console.log("Anchor and img tags updated")
     }
 
     chrome.runtime.sendMessage(

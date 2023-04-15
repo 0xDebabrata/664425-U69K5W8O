@@ -17,31 +17,44 @@ app.get('/', (req: Request, res: Response) => {
 
 app.post('/process-elements', async (req: Request, res: Response) => {
     const { a, img, btn } = req.body
-    const imgCaptions: string[] = []
     const parr = []
-
-    const anchorOutput: string = await gptCall(a, "anchor");
-    const anchorAccessibleArray = anchorOutput.split("\n")
-
-    const buttonOutput: string = await gptCall(btn, "button");
-    const buttonAccessibleArray = buttonOutput.split("\n")
-
-    const promises = []
-    for (const url in img) {
-        const data = fetch('http://localhost:8080/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                url: url
-            })
-        })
-        parr.push(data)
+    let anchorAccessibleArray: any[] = []
+    let buttonAccessibleArray: any[] = []
+    let imageAccessibleArray: any[] = []
+    if (a) {
+        const anchorOutput: string = await gptCall(a, "anchor");
+        anchorAccessibleArray = anchorOutput.split("\n")
     }
 
-    const imageAccessibleArray = await Promise.all(parr)
+    if (btn) {
+        const buttonOutput: string = await gptCall(btn, "button");
+        buttonAccessibleArray = buttonOutput.split("\n")
+    }
 
+    if (img) {
+        for (const url in img) {
+            const data = fetch('http://localhost:8080/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    url: url
+                })
+            })
+            parr.push(data)
+        }
+
+        imageAccessibleArray = await Promise.all(parr)
+    }
+
+    const serverResponse = {
+        a: anchorAccessibleArray,
+        btn: buttonAccessibleArray,
+        img: imageAccessibleArray
+    }
+
+    console.log(serverResponse)
     res.json({
         a: anchorAccessibleArray,
         btn: buttonAccessibleArray,

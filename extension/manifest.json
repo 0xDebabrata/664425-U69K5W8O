@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "accessify.",
+  "description": "Improving web accessiblity",
+  "version": "1.0",
+  "background": "background.js",
+  "icons": {
+    "128": "assets/logo.png"
+  },
+  "action": {
+    "default_icon": {
+        "128": "assets/logo.png"
+    }
+  },
+  "permissions": ["activeTab", "scripting"],
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": [
+          "https://*/*"
+      ]
+    }
+  ]
+}

@@ -16,21 +16,12 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/process-elements', async (req: Request, res: Response) => {
-    console.log(req.body)
+    const { a } = req.body
 
-    const anchorList = [
-        "https://www.google.com",
-        "https://www.facebook.com",
-        "https://www.commonplace.one",
-        "https://www.devstream.in"
-    ]
-
-    return res.json("Ok")
-    const accessibleOutput: string = await gptCall(anchorList, "anchor");
-    console.log(accessibleOutput)
+    const accessibleOutput: string = await gptCall(a, "anchor");
     const accessibleArray = accessibleOutput.split("\n")
     //res.send(accessibleArray)
-    res.send("Ok")
+    res.json(accessibleArray)
 });
 
 app.listen(PORT, () => {

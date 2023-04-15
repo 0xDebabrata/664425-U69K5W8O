@@ -48,7 +48,7 @@ const improveAccessibility = () => {
             anchorTags[i].ariaLabel = response.a[i]
         }
         for (let i = 0; i < response.img.length; i++) {
-            imgTags[i].alt = response.a[i]
+            imgTags[i].alt = response.a[i].substr(10, response.a[i].length - 6 - 11)
         }
         console.log("Anchor and img tags updated")
     }

@@ -3,7 +3,6 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log(message)
     fetch('http://localhost:3000/process-elements', {
         method: "POST",
         headers: {

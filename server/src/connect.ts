@@ -1,8 +1,9 @@
 import { GPT_CHAT_URL, OPENAI_API_KEY } from "./environment"
-import { prompts } from "./sys_content"
-export async function gptCall(elementList: string[]): Promise<string[]> {
+import { prompts } from "./sys_prompts"
+
+export async function gptCall(elementList: string[], type: "button" | "anchor"): Promise<string> {
     console.log("gpt call invoked")
-    const gptInputString: string = elementList.join("\n")
+    const gptInputString: string = '\n' + elementList.join("\n")
     const res = await fetch(GPT_CHAT_URL, {
         method: "POST",
         headers: {
@@ -11,15 +12,14 @@ export async function gptCall(elementList: string[]): Promise<string[]> {
         },
         body: JSON.stringify({
             "model": "gpt-3.5-turbo",
-            "temperature": prompts.button.temperature,
+            "temperature": prompts[type].temperature,
             "messages": [
-                { "role": "system", "content": prompts.button.sysMessage },
-                { "role": "user", "content": gptInputString }
+                { "role": "system", "content": prompts[type].sysMessage },
+                { "role": "user", "content": prompts[type].userMessage + gptInputString }
             ]
         })
     })
 
     const [{ message }] = (await res.json()).choices
-    console.log(message)
-    return ["this is more GG"]
+    return message.content
 }

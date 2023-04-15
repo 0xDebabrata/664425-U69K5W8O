@@ -18,8 +18,17 @@ app.get('/handle-html', async (req: Request, res: Response) => {
         "<button>This is a button</button>",
         "<button>This is another button</button>"
     ]
-    const ans = await gptCall(buttonList);
-    res.send("this is header html GG")
+
+    const anchorList = [
+        "https://www.google.com",
+        "https://www.facebook.com",
+        "https://www.commonplace.one",
+        "https://www.devstream.in"
+    ]
+    const accessibleOutput: string = await gptCall(anchorList, "anchor");
+    console.log(accessibleOutput)
+    const accessibleArray = accessibleOutput.split("\n")
+    res.send(accessibleArray)
 });
 
 app.listen(PORT, () => {
